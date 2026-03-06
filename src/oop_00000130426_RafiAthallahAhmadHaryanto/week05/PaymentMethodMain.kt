@@ -21,6 +21,8 @@ fun main(){
                 listPM.processPayment(75000.0)
             }
             is EWallet -> {
+                println("\n2. Payment with E-Wallet")
+                listPM.topUp(50000.0)
                 listPM.processPayment(75000.0)
             }
         }
