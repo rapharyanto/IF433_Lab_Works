@@ -1,9 +1,6 @@
 package oop_00000130426_RafiAthallahAhmadHaryanto.week6
 
 interface Clickable {
-    // ERROR: Property in an interface cannot have a backing field
-    val name: String = "Tombol Rahasia"
-
-    //Function without boddy (Implicitly Abstract)
+    val name: String // Abstract property, tidak ada nilai default
     fun click()
 }
