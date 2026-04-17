@@ -31,4 +31,17 @@ class ApiParser {
             else -> null // tipe tidak dikenal
         }
     }
+    fun checkout(product: Product) {
+        // Ekstrak ID pakai when (karena sealed class)
+        val productId = when (product) {
+            is Electronic -> product.id
+            is Clothing -> product.id
+        }
+
+        // Panggil Java static method
+        val transactionId = JavaPaymentService.processPayment(productId)!!
+
+        // Print hasil
+        println("Transaction ID: $transactionId")
+    }
 }
