@@ -23,7 +23,6 @@ fun main() {
     val mixedData: List<Any> = listOf(
         "SmartPhone",1500000, UserProfile("Andi", null), "Laptop", 4500000.0
     )
-
     for (item in mixedData) {
         val text = item as? String
 
@@ -37,4 +36,13 @@ fun main() {
     // Coba cast ke String. Jika gagal (null), ganti dengan "Unknown String"
     val safeString = someObject as? String ?: "Unknown String"
     println("Hasil cast + fallback: $safeString")
+
+    println("\n=== TEST THE RED BUTTON (!!) ===")
+    val toxicData: String? = null
+    try {
+        // DANGEROUS: Memaksa compiler percaya data ini tidak null
+        val length = toxicData!!.length
+    } catch (e: NullPointerException) {
+        println ("CRASH (NPE)! Jangan gunakan !! secara sembarangan.")
+    }
 }
