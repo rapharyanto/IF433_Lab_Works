@@ -39,4 +39,15 @@ fun main() {
     losingTrades.forEach {
         println(it)
     }
+
+    val topPerformersString = winningTrades
+        .sortedByDescending { it.roe }
+        .map {
+            "WIN [${it.pair} - ${it.position}]: +${it.roe}% ROE (Lev: ${it.leverage}x)"
+        }
+
+    // Cek hasil
+    topPerformersString.forEach {
+        println(it)
+    }
 }
