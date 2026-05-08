@@ -13,7 +13,7 @@ fun main(){
         homeDevices.add(it)
     }
 
-    //configure security camera
+    // configure security camera
     SmartDevice("Ezviz Outdoor", "Camera"). apply {
         isOnline = true
         powerLoad = 5
@@ -21,4 +21,24 @@ fun main(){
         println("[LOG] Security Camera is Connected")
         homeDevices.add(it)
     }
+
+    // configure AC with run
+    val airConditioner = run {
+        SmartDevice(
+            "Daikin Inverter (Kabel 3x2.5)",
+            "HVAC",
+            false,
+            800
+        )
+    }
+    homeDevices.add(airConditioner)
+
+    homeDevices.add(
+        SmartDevice(
+            "Picolo's Auto Feeder",
+            "Pet Care",
+            true,
+            10
+        )
+    )
 }
