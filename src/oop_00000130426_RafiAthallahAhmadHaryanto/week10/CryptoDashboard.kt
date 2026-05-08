@@ -14,8 +14,9 @@ fun main() {
     )
     println("Status: ${response.status}")
 
-    println("\n=== Coin Data ===")
-    response.data.forEach {
-        println("${it.name} : ${it.balance}")
+    response.data.forEach { coin ->
+        println("Coin: ${coin.name}")
+        println("Balance: ${coin.balance}")
+        println()
     }
 }
