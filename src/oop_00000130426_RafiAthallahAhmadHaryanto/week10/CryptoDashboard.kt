@@ -2,22 +2,33 @@ package oop_00000130426_RafiAthallahAhmadHaryanto.week10
 
 fun main() {
     val coinRepo = WalletRepository <Coin>()
-    val txRepo = WalletRepository <Transaction>()
 
     coinRepo.add(Coin("BTC", 0.75))
     coinRepo.add(Coin("ETH", 2.5))
     coinRepo.add(Coin("USDT", 1500.0))
 
-    println("=== Wallet Coins ===")
     val response = ApiResponse(
         "200 OK",
         coinRepo.getAll()
     )
     println("Status: ${response.status}")
 
+    println("=== Wallet Coins ===")
     response.data.forEach { coin ->
         println("Coin: ${coin.name}")
         println("Balance: ${coin.balance}")
+        println()
+    }
+
+    val txRepo = WalletRepository <Transaction>()
+    txRepo.add(Transaction("TX001", 250000.0))
+    txRepo.add(Transaction("TX002", 500000.0))
+    txRepo.add(Transaction("TX003", 125000.0))
+
+    println("=== Transactions ===")
+    txRepo.getAll().forEach { tx ->
+        println("Transaction ID : ${tx.id}")
+        println("Amount         : ${tx.amount}")
         println()
     }
 }
