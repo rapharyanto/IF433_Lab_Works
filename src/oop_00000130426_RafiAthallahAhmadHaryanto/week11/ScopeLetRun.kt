@@ -10,4 +10,11 @@ fun main() {
         it.length // Mengembalikan nilai expression terakhir
     }
     println("Panjang nama: $length")
+
+    println("\n=== TEST RUN FUNCTION ===")
+    val result = "Kotlin".run {
+        println("Memproses kata: ${this}") // 'this' bisa dihilangkan (implicit)
+        (length ?: 0) * 2 // pke elvis operator
+    }
+    println("Hasil kalkulasi run: $result")
 }
