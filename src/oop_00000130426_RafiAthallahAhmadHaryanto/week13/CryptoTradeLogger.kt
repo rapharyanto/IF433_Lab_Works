@@ -54,25 +54,37 @@ fun loadTrades(path: String): List<TradeRecord> {
 }
 
 fun main() {
-    fun main() {
 
-        val trades = listOf(
-            TradeRecord(1, "BTCUSDT", "LONG", 1500.0, 245.75),
-            TradeRecord(2, "ETHUSDT", "SHORT", 1000.0, -120.50),
-            TradeRecord(3, "SOLUSDT", "LONG", 750.0, 89.30)
+    val trades = listOf(
+        TradeRecord(1, "BTCUSDT", "LONG", 1500.0, 245.75),
+        TradeRecord(2, "ETHUSDT", "SHORT", 1000.0, -120.50),
+        TradeRecord(3, "SOLUSDT", "LONG", 750.0, 89.30)
+    )
+
+    saveTrades(trades, "crypto_trades.csv")
+
+    println("Data trade berhasil disimpan ke crypto_trades.csv")
+
+    File("crypto_trades.csv")
+        .appendText("CORRUPT_ID,DOGEUSDT,Hold,XX,YY\n")
+
+    println("Data korup berhasil ditambahkan\n")
+
+    val loadedData = loadTrades("crypto_trades.csv")
+
+    println("==== VALID TRADE HISTORY ====")
+
+    loadedData.forEach { trade ->
+        println(
+            "ID: ${trade.id} | " +
+                    "Symbol: ${trade.symbol} | " +
+                    "Type: ${trade.type} | " +
+                    "Margin: ${trade.margin} | " +
+                    "PnL: ${trade.pnl}"
         )
-
-        saveTrades(trades, "crypto_trades.csv")
-        println("Data trade berhasil disimpan ke crypto_trades.csv")
-
-        File("crypto_trades.csv")
-            .appendText("CORRUPT_ID,DOGEUSDT,Hold,XX,YY\n")
-
-        println("Data korup berhasil ditambahkan")
-
-        val loadedData = loadTrades("crypto_trades.csv")
-        val totalPnL = loadedData.sumOf { it.pnl }
-
-        println("Total Net PnL: $totalPnL")
     }
+
+    val totalPnL = loadedData.sumOf { it.pnl }
+
+    println("==== TOTAL PnL BERSIH: $totalPnL ====")
 }
