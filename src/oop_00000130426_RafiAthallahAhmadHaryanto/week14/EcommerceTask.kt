@@ -22,3 +22,58 @@ class BadOrderProcessor {
         println("Email terkirim: Pesanan $itemName Anda telah dikonfirmasi!")
     }
 }
+
+interface OrderRepository {
+    fun saveOrder(itemName: String, finalPrice: Double, customerType: String)
+}
+
+class CsvOrderRepository : OrderRepository {
+    private val file = File("orders.csv")
+
+    override fun saveOrder(itemName: String, finalPrice: Double, customerType: String) {
+        file.appendText("$itemName, $finalPrice, $customerType\n")
+    }
+}
+
+interface NotificationService {
+    fun sendNotification(message: String)
+}
+
+class EmailNotifier : NotificationService {
+    override fun sendNotification(message: String) {
+        println("Email terkirim: $message")
+    }
+}
+
+class SafeOrderProcessor(
+    private val repo: OrderRepository,
+    private val notifier: NotificationService
+) {
+
+    fun processOrder(itemName: String, basePrice: Double, customerType: String) {
+
+        val finalPrice = when (customerType) {
+            "REGULAR" -> basePrice
+            "VIP" -> basePrice * 0.90
+            else -> basePrice
+        }
+
+        println("Memproses pesanan $itemName seharga $finalPrice")
+
+        // hanya delegasi, tidak tahu detail file/email
+        repo.saveOrder(itemName, finalPrice, customerType)
+
+        notifier.sendNotification(
+            "Pesanan $itemName Anda telah dikonfirmasi!"
+        )
+    }
+}
+
+fun main() {
+    val repo = CsvOrderRepository()
+    val notifier = EmailNotifier()
+
+    val processor = SafeOrderProcessor(repo, notifier)
+
+    processor.processOrder("Keyboard", 500000.0, "VIP")
+}
