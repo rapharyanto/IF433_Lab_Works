@@ -50,22 +50,37 @@ class SafeOrderProcessor(
     private val notifier: NotificationService
 ) {
 
-    fun processOrder(itemName: String, basePrice: Double, customerType: String) {
+    fun processOrder(
+        itemName: String,
+        basePrice: Double,
+        pricingStrategy: PricingStrategy
+    ) {
 
-        val finalPrice = when (customerType) {
-            "REGULAR" -> basePrice
-            "VIP" -> basePrice * 0.90
-            else -> basePrice
-        }
+        val finalPrice = pricingStrategy.calculate(basePrice)
 
         println("Memproses pesanan $itemName seharga $finalPrice")
 
-        // hanya delegasi, tidak tahu detail file/email
-        repo.saveOrder(itemName, finalPrice, customerType)
+        repo.saveOrder(itemName, finalPrice, pricingStrategy.javaClass.simpleName)
 
         notifier.sendNotification(
             "Pesanan $itemName Anda telah dikonfirmasi!"
         )
+    }
+}
+
+interface PricingStrategy {
+    fun calculate(price: Double): Double
+}
+
+class RegularPricing : PricingStrategy {
+    override fun calculate(price: Double): Double {
+        return price
+    }
+}
+
+class VipPricing : PricingStrategy {
+    override fun calculate(price: Double): Double {
+        return price * 0.90
     }
 }
 
@@ -75,5 +90,9 @@ fun main() {
 
     val processor = SafeOrderProcessor(repo, notifier)
 
-    processor.processOrder("Keyboard", 500000.0, "VIP")
+    val vip = VipPricing()
+    val regular = RegularPricing()
+
+    processor.processOrder("Keyboard", 500000.0, vip)
+    processor.processOrder("Mouse", 200000.0, regular)
 }
